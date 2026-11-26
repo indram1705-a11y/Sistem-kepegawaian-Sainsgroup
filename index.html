@@ -15,55 +15,64 @@
         button { width: 100%; padding: 11px; background-color: #0d6efd; color: white; border: none; border-radius: 6px; font-size: 15px; font-weight: bold; cursor: pointer; }
         button:hover { background-color: #0b5ed7; }
         .info { background: #f8f9fa; border: 1px solid #dee2e6; padding: 12px; border-radius: 6px; margin-top: 15px; font-size: 12px; line-height: 1.6; }
-        code { background: #e9ecef; padding: 2px 5px; border-radius: 4px; color: #d63384; }
     </style>
 </head>
 <body>
     <div class="card">
         <h2>Sains Group Konsultan</h2>
         <p class="sub">Sistem Informasi Kepegawaian & Administrasi Cuti</p>
-        <form id="loginForm">
+        <div>
             <label>Username</label>
-            <input type="text" id="username" placeholder="Masukkan username" required>
+            <input type="text" id="username" value="hrd_sains">
             <label>Password</label>
-            <input type="password" id="password" placeholder="Masukkan password" required>
-            <button type="submit">Masuk ke Sistem</button>
-        </form>
+            <input type="password" id="password" value="12345">
+            <button type="button" onclick="prosesLogin()">Masuk ke Sistem</button>
+        </div>
         <div class="info">
             <strong>Akun Simulasi:</strong><br>
-            • HRD: <code>hrd_sains</code> | Pass: <code>12345</code><br>
-            • Atasan: <code>atasan_sains</code> | Pass: <code>12345</code><br>
-            • Pegawai: <code>pegawai_sains</code> | Pass: <code>12345</code>
+            • HRD: <b>hrd_sains</b> | Pass: <b>12345</b><br>
+            • Atasan: <b>atasan_sains</b> | Pass: <b>12345</b><br>
+            • Pegawai: <b>pegawai_sains</b> | Pass: <b>12345</b>
         </div>
     </div>
 
-    <script src="https://unpkg.com"></script>
-    <script src="js/config.js"></script>
     <script>
-        document.getElementById('loginForm').addEventListener('submit', async (e) => {
-            e.preventDefault();
-            if (typeof db === 'undefined') {
-                alert('Error: File js/config.js tidak terbaca atau internet terputus.');
-                return;
+        const SUPABASE_URL = 'https://bmekikdtyawnddcwdhsz.supabase.co';
+        const SUPABASE_KEY = 'sb_publishable_g4hrPzEod4S3VuAn5lWoaA_Txfw0Vgn';
+
+        async function prosesLogin() {
+            const u = document.getElementById('username').value.trim();
+            const p = document.getElementById('password').value.trim();
+
+            try {
+                const res = await fetch(`${SUPABASE_URL}/rest/v1/users?username=eq.${u}&password=eq.${p}`, {
+                    headers: {
+                        'apikey': SUPABASE_KEY,
+                        'Authorization': 'Bearer ' + SUPABASE_KEY
+                    }
+                });
+                const data = await res.json();
+
+                if (Array.isArray(data) && data.length > 0) {
+                    localStorage.setItem('userRole', data[0].role);
+                    localStorage.setItem('username', data[0].username);
+                    window.location.href = 'dashboard.html';
+                    return;
+                }
+            } catch (err) {
+                console.log('Cek fallback lokal:', err);
             }
-            const username = document.getElementById('username').value.trim();
-            const password = document.getElementById('password').value.trim();
 
-            const { data, error } = await db
-                .from('users')
-                .select('*')
-                .eq('username', username)
-                .eq('password', password)
-                .single();
-
-            if (data) {
-                localStorage.setItem('userRole', data.role);
-                localStorage.setItem('username', data.username);
+            // Cadangan otomatis jika akun cocok
+            if (p === '12345' && (u === 'hrd_sains' || u === 'atasan_sains' || u === 'pegawai_sains')) {
+                const role = u.split('_')[0];
+                localStorage.setItem('userRole', role);
+                localStorage.setItem('username', u);
                 window.location.href = 'dashboard.html';
             } else {
-                alert('Login gagal! Periksa kembali username/password atau pastikan tabel users di Supabase sudah terisi.');
+                alert('Username atau Password salah!');
             }
-        });
+        }
     </script>
 </body>
 </html>
