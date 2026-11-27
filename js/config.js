@@ -1,4 +1,4 @@
-const SUPABASE_URL = 'https://supabase.co';
+const SUPABASE_URL = 'https://bmekikdtyawnddcwdhsz.supabase.co';
 const SUPABASE_ANON_KEY = 'sb_publishable_g4hrPzEod4S3VuAn5lWoaA_Txfw0Vgn';
 
 const NAMA_PEGAWAI = [
