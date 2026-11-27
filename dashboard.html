@@ -7,295 +7,462 @@
     <style>
         * { box-sizing: border-box; font-family: 'Segoe UI', Tahoma, sans-serif; }
         body { background-color: #f4f6f9; margin: 0; color: #333; }
-        .navbar { background: #0d6efd; color: white; padding: 15px 30px; display: flex; justify-content: space-between; align-items: center; }
-        .navbar h3 { margin: 0; font-size: 18px; }
-        .container { max-width: 1150px; margin: 20px auto; padding: 0 15px; }
+        .navbar { background-color: #0d6efd; color: white; padding: 15px 25px; display: flex; justify-content: space-between; align-items: center; }
+        .navbar h1 { margin: 0; font-size: 18px; letter-spacing: 0.5px; }
+        .container { max-width: 1200px; margin: 20px auto; padding: 0 20px; }
         .stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; margin-bottom: 20px; }
-        .stat-box { background: white; padding: 15px 20px; border-radius: 8px; box-shadow: 0 2px 6px rgba(0,0,0,0.06); border-left: 5px solid #0d6efd; }
-        .stat-box h2 { margin: 5px 0 0 0; font-size: 26px; }
+        .stat-card { background: white; padding: 18px 20px; border-radius: 8px; box-shadow: 0 2px 6px rgba(0,0,0,0.06); border-left: 4px solid #0d6efd; display: flex; justify-content: space-between; align-items: center; }
+        .stat-card.cuti { border-left-color: #ffc107; }
+        .stat-card.cetak { border-left-color: #198754; }
+        .stat-card h3 { margin: 0 0 5px 0; font-size: 13px; color: #666; font-weight: normal; }
+        .stat-card .num { font-size: 26px; font-weight: bold; color: #222; }
         .tabs { display: flex; gap: 10px; margin-bottom: 15px; }
-        .tab-btn { padding: 10px 18px; border: none; background: #dee2e6; border-radius: 6px; cursor: pointer; font-weight: bold; }
+        .tab-btn { padding: 10px 18px; border: none; border-radius: 6px; background: #e2e6ea; color: #333; font-weight: 600; cursor: pointer; }
         .tab-btn.active { background: #0d6efd; color: white; }
-        .card { background: white; padding: 20px; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.06); margin-bottom: 20px; }
-        .toolbar { display: flex; justify-content: space-between; margin-bottom: 15px; gap: 10px; flex-wrap: wrap; }
-        input, select, textarea { padding: 8px; border: 1px solid #ccc; border-radius: 5px; font-size: 13px; }
-        .btn { padding: 8px 14px; border: none; border-radius: 5px; cursor: pointer; font-weight: 600; font-size: 13px; color: white; }
+        .panel { background: white; padding: 20px; border-radius: 8px; box-shadow: 0 2px 6px rgba(0,0,0,0.06); }
+        .panel-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; flex-wrap: wrap; gap: 10px; }
+        .panel-header h2 { margin: 0; font-size: 16px; }
+        .btn { padding: 8px 14px; border: none; border-radius: 5px; font-size: 13px; font-weight: 600; cursor: pointer; color: white; }
         .btn-primary { background: #0d6efd; }
         .btn-success { background: #198754; }
         .btn-warning { background: #ffc107; color: #000; }
         .btn-danger { background: #dc3545; }
+        input, select, textarea { padding: 8px 10px; border: 1px solid #ccc; border-radius: 5px; font-size: 13px; }
+        .form-box { background: #f8f9fa; border: 1px solid #dee2e6; padding: 15px; border-radius: 6px; margin-bottom: 15px; display: none; }
+        .form-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin-bottom: 10px; }
         table { width: 100%; border-collapse: collapse; font-size: 13px; }
-        th, td { border: 1px solid #dee2e6; padding: 8px 10px; text-align: left; }
-        th { background: #0d6efd; color: white; }
-        tr:nth-child(even) { background: #f8f9fa; }
-        .badge { padding: 3px 7px; border-radius: 4px; font-size: 11px; font-weight: bold; background: #e9ecef; }
-        .grid-cuti { display: grid; grid-template-columns: 1fr 2fr; gap: 20px; }
-        .form-group { margin-bottom: 10px; }
-        .form-group label { display: block; font-size: 12px; font-weight: bold; margin-bottom: 4px; }
-        .form-group input, .form-group select, .form-group textarea { width: 100%; }
-        @media print { .no-print { display: none !important; } }
+        th { background: #0d6efd; color: white; text-align: left; padding: 10px; }
+        td { padding: 9px 10px; border-bottom: 1px solid #eee; }
+        tr:hover { background-color: #f8f9fa; }
+        .badge { padding: 3px 8px; border-radius: 4px; font-size: 11px; font-weight: 600; background: #e9ecef; }
+        .cuti-grid { display: grid; grid-template-columns: 340px 1fr; gap: 20px; }
+        .cuti-form label { display: block; font-size: 12px; font-weight: 600; margin: 8px 0 4px; }
+        .cuti-form input, .cuti-form select, .cuti-form textarea { width: 100%; }
+
+        .print-only { display: none; }
+        @media print {
+            body { background: white; color: black; font-family: 'Times New Roman', Times, serif; }
+            .navbar, .stats, .tabs, .panel-header, .form-box, .no-print { display: none !important; }
+            .container { max-width: 100%; margin: 0; padding: 0; }
+            .panel { box-shadow: none; padding: 0; }
+            .print-only { display: block; }
+            .sembunyi-cetak { display: none !important; }
+            .kop-surat { border-bottom: 3px double #000; padding-bottom: 10px; margin-bottom: 18px; text-align: center; }
+            .kop-surat h1 { margin: 0; font-size: 20px; text-transform: uppercase; letter-spacing: 1px; color: #000; }
+            .kop-surat h2 { margin: 3px 0; font-size: 14px; font-weight: normal; color: #000; }
+            .kop-surat p { margin: 2px 0; font-size: 11px; color: #222; }
+            .judul-laporan { text-align: center; margin-bottom: 15px; }
+            .judul-laporan h3 { margin: 0; font-size: 14px; text-decoration: underline; text-transform: uppercase; }
+            .judul-laporan p { margin: 3px 0 0; font-size: 12px; }
+            table { font-size: 11px; border: 1px solid #000; }
+            th { background-color: #e9ecef !important; color: #000 !important; border: 1px solid #000; padding: 6px; -webkit-print-color-adjust: exact; }
+            td { border: 1px solid #000; padding: 5px 6px; color: #000; }
+            .badge { border: none; padding: 0; background: none; font-weight: normal; }
+            .ttd-container { margin-top: 35px; display: flex !important; justify-content: space-between; width: 100%; page-break-inside: avoid; font-size: 12px; }
+            .ttd-box { width: 220px; text-align: center; }
+            .ttd-space { height: 65px; }
+        }
     </style>
 </head>
 <body>
-    <div class="navbar no-print">
-        <h3>SAINS GROUP KONSULTAN KUPANG</h3>
+    <div class="navbar">
+        <h1>SAINS GROUP KONSULTAN KUPANG</h1>
         <div>
-            <span style="font-size:13px; margin-right:10px;">User: <strong id="displayUser"></strong> (<span id="displayRole"></span>)</span>
-            <button onclick="logout()" class="btn btn-danger">Logout</button>
+            <span style="font-size:13px; margin-right:12px;">User: <b id="lblUser">-</b> (<span id="lblRole">-</span>)</span>
+            <button class="btn btn-danger" onclick="logout()">Logout</button>
         </div>
     </div>
-
     <div class="container">
-        <div class="stats no-print">
-            <div class="stat-box"><div>Total Data Pegawai</div><h2 id="totalPegawai">0</h2></div>
-            <div class="stat-box" style="border-color:#ffc107;"><div>Total Pengajuan Cuti</div><h2 id="totalCuti">0</h2></div>
-            <div class="stat-box" style="border-color:#198754; display:flex; justify-content:space-between; align-items:center;">
-                <div><div>Laporan Arsip</div><strong>Siap Cetak PDF</strong></div>
-                <button onclick="window.print()" class="btn btn-success">Cetak Laporan</button>
-            </div>
-        </div>
-
-        <div class="tabs no-print">
-            <button class="tab-btn active" onclick="bukaTab('secPegawai', this)">1. Data Pegawai (50+ Data)</button>
-            <button class="tab-btn" onclick="bukaTab('secCuti', this)">2. Administrasi Dokumen Cuti</button>
-        </div>
-
-        <!-- SECTION 1: DATA PEGAWAI -->
-        <div id="secPegawai" class="card">
-            <div class="toolbar no-print">
-                <h4 style="margin:0;">Daftar Pegawai Sains Group Konsultan Kupang</h4>
-                <div>
-                    <input type="text" id="searchPegawai" onkeyup="filterPegawai()" placeholder="Cari NIP / Nama / Divisi...">
-                    <button id="btnToggleForm" class="btn btn-primary" onclick="toggleFormPegawai()">+ Tambah Pegawai</button>
+        <div class="stats">
+            <div class="stat-card"><div><h3>Total Data Pegawai</h3><div class="num" id="statPegawai">0</div></div></div>
+            <div class="stat-card cuti"><div><h3>Total Pengajuan Cuti</h3><div class="num" id="statCuti">0</div></div></div>
+            <div class="stat-card cetak">
+                <div><h3>Laporan Arsip</h3><div style="font-size:15px; font-weight:bold;">Siap Cetak PDF</div></div>
+                <div style="display:flex; flex-direction:column; gap:5px;">
+                    <button class="btn btn-success" onclick="cetakLaporanResmi()">Cetak Laporan</button>
+                    <button class="btn btn-primary" onclick="cetakSuratCutiTerakhir()">Cetak Surat Cuti</button>
                 </div>
             </div>
-
-            <!-- Form Tambah/Edit Pegawai -->
-            <div id="boxFormPegawai" style="display:none; background:#f8f9fa; padding:15px; border-radius:6px; margin-bottom:15px; border:1px solid #ddd;" class="no-print">
-                <h5 id="judulFormPegawai" style="margin:0 0 10px 0;">Tambah Pegawai Baru</h5>
-                <form id="formPegawai" style="display:grid; grid-template-columns: repeat(4, 1fr); gap:10px;">
-                    <input type="hidden" id="editMode" value="false">
-                    <input type="text" id="nip" placeholder="NIP (Contoh: SGK-051)" required>
-                    <input type="text" id="nama_lengkap" placeholder="Nama Lengkap" required>
-                    <input type="text" id="jabatan" placeholder="Jabatan" required>
-                    <select id="divisi">
+        </div>
+        <div class="tabs">
+            <button class="tab-btn active" id="btnTabPegawai" onclick="switchTab('pegawai')">1. Data Pegawai (50+ Data)</button>
+            <button class="tab-btn" id="btnTabCuti" onclick="switchTab('cuti')">2. Administrasi Dokumen Cuti</button>
+        </div>
+        <div class="panel" id="tabPegawai">
+            <div class="print-only kop-surat">
+                <h1>PT. SAINS GROUP KONSULTAN KUPANG</h1>
+                <h2>Biro Konsultan Perencanaan, Manajemen Bisnis, & Pengembangan Wilayah</h2>
+                <p>Jl. El Tari II No. 45, Kelapa Lima, Kota Kupang, Nusa Tenggara Timur (NTT) 85228</p>
+                <p>Telp: (0380) 824519 | Email: info@sainsgroup.co.id | Website: https://vercel.app</p>
+            </div>
+            <div class="print-only judul-laporan">
+                <h3>LAPORAN DATA INDUK KEPEGAWAIAN</h3>
+                <p>Nomor Dokumen: 045/HRD-SGK/XI/2026</p>
+            </div>
+            <div class="panel-header">
+                <h2>Daftar Pegawai Sains Group Konsultan Kupang</h2>
+                <div style="display:flex; gap:8px;">
+                    <input type="text" id="searchPegawai" placeholder="Cari NIP / Nama / Divisi..." onkeyup="filterPegawai()">
+                    <button class="btn btn-primary" id="btnTambahPegawai" onclick="bukaFormPegawai()">+ Tambah Pegawai</button>
+                </div>
+            </div>
+            <div class="form-box" id="formPegawaiBox">
+                <h4 style="margin:0 0 10px 0;" id="formTitle">Tambah Data Pegawai</h4>
+                <div class="form-grid">
+                    <input type="text" id="inNip" placeholder="NIP (Contoh: SGK-051)">
+                    <input type="text" id="inNama" placeholder="Nama Lengkap">
+                    <input type="text" id="inJabatan" placeholder="Jabatan">
+                    <select id="inDivisi">
                         <option value="Manajemen">Manajemen</option>
+                        <option value="SDM & Umum">SDM & Umum</option>
                         <option value="Perencanaan">Perencanaan</option>
                         <option value="Bisnis & Proyek">Bisnis & Proyek</option>
                         <option value="Keuangan">Keuangan</option>
-                        <option value="SDM & Umum">SDM & Umum</option>
                     </select>
-                    <input type="email" id="email" placeholder="Email" required>
-                    <input type="text" id="no_hp" placeholder="No. HP" required>
-                    <input type="number" id="sisa_cuti" value="12" placeholder="Sisa Cuti" required>
-                    <div>
-                        <button type="submit" class="btn btn-success">Simpan</button>
-                        <button type="button" class="btn btn-danger" onclick="toggleFormPegawai(false)">Batal</button>
+                </div>
+                <div class="form-grid" style="grid-template-columns: 1fr 1fr 120px auto;">
+                    <input type="email" id="inEmail" placeholder="Email Kantor">
+                    <input type="text" id="inHp" placeholder="No. HP / WhatsApp">
+                    <input type="number" id="inCuti" value="12" placeholder="Sisa Cuti">
+                    <div style="display:flex; gap:5px;">
+                        <button class="btn btn-success" onclick="simpanPegawai()">Simpan</button>
+                        <button class="btn btn-danger" onclick="tutupFormPegawai()">Batal</button>
                     </div>
-                </form>
+                </div>
             </div>
+            <table>
+                <thead>
+                    <tr>
+                        <th style="width:40px;">No</th>
+                        <th>NIP</th>
+                        <th>Nama Lengkap</th>
+                        <th>Jabatan</th>
+                        <th>Divisi</th>
+                        <th>Email & No. HP</th>
+                        <th>Sisa Cuti</th>
+                        <th class="no-print">Aksi</th>
+                    </tr>
+                </thead>
+                <tbody id="tbodyPegawai"></tbody>
+            </table>
+            <div class="print-only ttd-container">
+                <div class="ttd-box">
+                    <p>Menyetujui,<br>Atasan / Kepala Divisi</p>
+                    <div class="ttd-space"></div>
+                    <p><b><u>Yohanes Baptista Leki</u></b><br>NIP. SGK-003</p>
+                </div>
+                <div class="ttd-box">
+                    <p>Kupang, <span id="tglCetak">27 November 2026</span><br>Manajer HRD & Umum</p>
+                    <div class="ttd-space"></div>
+                    <p><b><u>Maria Goreti Bria</u></b><br>NIP. SGK-002</p>
+                </div>
+            </div>
+        </div>
 
-            <div style="overflow-x:auto;">
-                <table>
-                    <thead>
-                        <tr>
-                            <th>No</th><th>NIP</th><th>Nama Lengkap</th><th>Jabatan</th><th>Divisi</th><th>Email & No. HP</th><th>Sisa Cuti</th><th class="no-print">Aksi</th>
-                        </tr>
-                    </thead>
-                    <tbody id="tabelPegawaiBody"></tbody>
+        <div class="panel" id="tabCuti" style="display:none;">
+            <div class="cuti-grid">
+                <div class="cuti-form" style="background:#f8f9fa; padding:15px; border-radius:6px; border:1px solid #dee2e6;">
+                    <h3 style="margin:0 0 10px 0; font-size:15px; color:#0d6efd;">Formulir Pengajuan Cuti</h3>
+                    <label>Pilih Pegawai (NIP)</label>
+                    <select id="cutiNip"></select>
+                    <label>Jenis Cuti</label>
+                    <select id="cutiJenis">
+                        <option value="Cuti Tahunan">Cuti Tahunan</option>
+                        <option value="Cuti Sakit">Cuti Sakit</option>
+                        <option value="Cuti Alasan Penting">Cuti Alasan Penting</option>
+                    </select>
+                    <label>Tanggal Mulai</label>
+                    <input type="date" id="cutiMulai">
+                    <label>Tanggal Selesai</label>
+                    <input type="date" id="cutiSelesai">
+                    <label>Lama Hari</label>
+                    <input type="number" id="cutiLama" value="1" min="1">
+                    <label>Alasan Cuti</label>
+                    <textarea id="cutiAlasan" rows="2" placeholder="Tuliskan alasan cuti..."></textarea>
+                    <button class="btn btn-primary" style="width:100%; margin-top:12px;" onclick="ajukanCuti()">Ajukan Cuti</button>
+                </div>
+                <div>
+                    <h3 style="margin:0 0 10px 0; font-size:15px;">Riwayat & Persetujuan Cuti Pegawai</h3>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>NIP</th>
+                                <th>Jenis & Periode</th>
+                                <th>Hari</th>
+                                <th>Alasan</th>
+                                <th>Atasan</th>
+                                <th>HRD</th>
+                                <th>Aksi</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tbodyCuti"></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- AREA CETAK SURAT IZIN CUTI RESMI -->
+        <div class="panel print-only" id="areaCetakSuratCuti" style="display:none;">
+            <div class="kop-surat">
+                <h1>PT. SAINS GROUP KONSULTAN KUPANG</h1>
+                <h2>Biro Konsultan Perencanaan, Manajemen Bisnis, & Pengembangan Wilayah</h2>
+                <p>Jl. El Tari II No. 45, Kelapa Lima, Kota Kupang, Nusa Tenggara Timur (NTT) 85228</p>
+                <p>Telp: (0380) 824519 | Email: info@sainsgroup.co.id</p>
+            </div>
+            <div class="judul-laporan">
+                <h3>SURAT IZIN CUTI PEGAWAI</h3>
+                <p id="suratNomor">Nomor: 012/CUTI-SGK/XI/2026</p>
+            </div>
+            <div style="font-size:13px; line-height:1.8; margin:20px 0;">
+                <p>Yang bertanda tangan di bawah ini, Manajemen <b>PT. Sains Group Konsultan Kupang</b>, menerangkan bahwa permohonan cuti dari pegawai berikut:</p>
+                <table style="width:100%; border:none; margin:15px 0;">
+                    <tr><td style="border:none; width:180px;">NIP</td><td style="border:none;">: <b id="scNip">-</b></td></tr>
+                    <tr><td style="border:none;">Nama Lengkap</td><td style="border:none;">: <b id="scNama">-</b></td></tr>
+                    <tr><td style="border:none;">Jabatan / Divisi</td><td style="border:none;">: <span id="scJabatan">-</span></td></tr>
+                    <tr><td style="border:none;">Jenis Cuti</td><td style="border:none;">: <b id="scJenis">-</b></td></tr>
+                    <tr><td style="border:none;">Periode Tanggal</td><td style="border:none;">: <span id="scPeriode">-</span> (<b id="scHari">-</b> Hari Kerja)</td></tr>
+                    <tr><td style="border:none;">Alasan Cuti</td><td style="border:none;">: <span id="scAlasan">-</span></td></tr>
+                    <tr><td style="border:none;">Status Persetujuan</td><td style="border:none;">: <b>DISETUJUI (Atasan & HRD)</b></td></tr>
                 </table>
+                <p>Telah disetujui secara resmi untuk melaksanakan cuti sesuai jadwal di atas. Demikian surat izin cuti ini diterbitkan untuk dipergunakan sebagaimana mestinya.</p>
+            </div>
+            <div class="ttd-container">
+                <div class="ttd-box">
+                    <p>Menyetujui,<br>Atasan / Direktur Operasional</p>
+                    <div class="ttd-space"></div>
+                    <p><b><u>Indra Yunar Maa</u></b><br>NIP. SGK-001 </p>
+                </div>
+                <div class="ttd-box">
+                    <p>Kupang, <span id="scTanggalCetak">27 November 2026</span><br>Manajer HRD & Umum</p>
+                    <div class="ttd-space"></div>
+                    <p><b><u>Maria Goreti Bria</u></b><br>NIP. SGK-002</p>
+                </div>
             </div>
         </div>
-        <!-- SECTION 2: ADMINISTRASI CUTI -->
-        <div id="secCuti" style="display:none;">
-            <div class="grid-cuti">
-                <div class="card no-print">
-                    <h4 style="margin-top:0; color:#0d6efd;">Formulir Pengajuan Cuti</h4>
-                    <form id="formCuti">
-                        <div class="form-group"><label>Pilih Pegawai (NIP)</label><select id="cutiNip" required></select></div>
-                        <div class="form-group"><label>Jenis Cuti</label>
-                            <select id="cutiJenis"><option value="Cuti Tahunan">Cuti Tahunan</option><option value="Cuti Sakit">Cuti Sakit</option><option value="Cuti Alasan Penting">Cuti Alasan Penting</option></select>
-                        </div>
-                        <div class="form-group"><label>Tanggal Mulai</label><input type="date" id="cutiMulai" required></div>
-                        <div class="form-group"><label>Tanggal Selesai</label><input type="date" id="cutiSelesai" required></div>
-                        <div class="form-group"><label>Lama Hari</label><input type="number" id="cutiHari" min="1" max="12" required></div>
-                        <div class="form-group"><label>Alasan Cuti</label><textarea id="cutiAlasan" rows="2" required></textarea></div>
-                        <button type="submit" class="btn btn-primary" style="width:100%;">Ajukan Cuti</button>
-                    </form>
-                </div>
 
-                <div class="card">
-                    <h4 style="margin-top:0;">Riwayat & Persetujuan Cuti Pegawai</h4>
-                    <div style="overflow-x:auto;">
-                        <table>
-                            <thead>
-                                <tr><th>NIP</th><th>Jenis & Periode</th><th>Hari</th><th>Alasan</th><th>Atasan</th><th>HRD</th><th class="no-print">Aksi</th></tr>
-                            </thead>
-                            <tbody id="tabelCutiBody"></tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
-        </div>
     </div>
-
     <script src="js/config.js"></script>
     <script>
-        const role = localStorage.getItem('userRole');
+        const role = (localStorage.getItem('userRole') || '').toLowerCase();
         const username = localStorage.getItem('username');
         if (!role) window.location.href = 'index.html';
 
-        document.getElementById('displayUser').innerText = username;
-        document.getElementById('displayRole').innerText = role.toUpperCase();
-        if (role !== 'hrd') document.getElementById('btnToggleForm').style.display = 'none';
+        document.getElementById('lblUser').innerText = username;
+        document.getElementById('lblRole').innerText = role.toUpperCase();
+        if (role !== 'hrd') document.getElementById('btnTambahPegawai').style.display = 'none';
 
-        let dataPegawaiGlobal = [];
+        let allPegawai = [];
+        let isEditMode = false;
 
-        function bukaTab(idSection, btn) {
-            document.getElementById('secPegawai').style.display = idSection === 'secPegawai' ? 'block' : 'none';
-            document.getElementById('secCuti').style.display = idSection === 'secCuti' ? 'block' : 'none';
-            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-            btn.classList.add('active');
+        function cetakLaporanResmi() {
+            switchTab('pegawai');
+            document.getElementById('areaCetakSuratCuti').classList.add('sembunyi-cetak');
+            document.getElementById('tabPegawai').classList.remove('sembunyi-cetak');
+            const opsiTanggal = { day: 'numeric', month: 'long', year: 'numeric' };
+            document.getElementById('tglCetak').innerText = new Date().toLocaleDateString('id-ID', opsiTanggal);
+            setTimeout(() => window.print(), 200);
         }
 
-        function toggleFormPegawai(show = true) {
-            const box = document.getElementById('boxFormPegawai');
-            box.style.display = show ? 'block' : 'none';
-            if (show) {
-                document.getElementById('formPegawai').reset();
-                document.getElementById('editMode').value = 'false';
-                document.getElementById('nip').readOnly = false;
-                document.getElementById('judulFormPegawai').innerText = 'Tambah Pegawai Baru';
+        async function cetakSuratCutiTerakhir() {
+            const { data } = await db.from('pengajuan_cuti').select('*').order('id_cuti', { ascending: false });
+            const disetujui = (data || []).find(c =>
+                (c.status_atasan || '').toLowerCase() === 'disetujui' &&
+                (c.status_hrd || '').toLowerCase() === 'disetujui'
+            );
+            if (!disetujui) {
+                return alert('Belum ada pengajuan cuti yang berstatus Disetujui oleh Atasan dan HRD.');
             }
+            cetakSuratCuti(disetujui.id_cuti);
+        } 
+
+        async function cetakSuratCuti(id) {
+            const { data } = await db.from('pengajuan_cuti').select('*');
+            const cuti = (data || []).find(item => item.id_cuti === id);
+            if (!cuti) return;
+            const peg = allPegawai.find(p => p.nip === cuti.nip) || { nama_lengkap: '-', jabatan: '-', divisi: '-' };
+
+            document.getElementById('scNip').innerText = cuti.nip;
+            document.getElementById('scNama').innerText = peg.nama_lengkap;
+            document.getElementById('scJabatan').innerText = `${peg.jabatan} (${peg.divisi})`;
+            document.getElementById('scJenis').innerText = cuti.jenis_cuti;
+            document.getElementById('scPeriode').innerText = `${cuti.tanggal_mulai} s/d ${cuti.tanggal_selesai}`;
+            document.getElementById('scHari').innerText = cuti.lama_hari;
+            document.getElementById('scAlasan').innerText = cuti.alasan;
+            document.getElementById('scTanggalCetak').innerText = new Date().toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' });
+
+            document.getElementById('tabPegawai').classList.add('sembunyi-cetak');
+            document.getElementById('tabCuti').classList.add('sembunyi-cetak');
+            document.getElementById('areaCetakSuratCuti').classList.remove('sembunyi-cetak');
+            document.getElementById('areaCetakSuratCuti').style.display = 'block';
+
+            setTimeout(() => {
+                window.print();
+                document.getElementById('areaCetakSuratCuti').style.display = 'none';
+                document.getElementById('tabPegawai').classList.remove('sembunyi-cetak');
+                document.getElementById('tabCuti').classList.remove('sembunyi-cetak');
+            }, 250);
+        }
+
+        function switchTab(tab) {
+            document.getElementById('tabPegawai').style.display = tab === 'pegawai' ? 'block' : 'none';
+            document.getElementById('tabCuti').style.display = tab === 'cuti' ? 'block' : 'none';
+            document.getElementById('btnTabPegawai').classList.toggle('active', tab === 'pegawai');
+            document.getElementById('btnTabCuti').classList.toggle('active', tab === 'cuti');
         }
 
         async function loadPegawai() {
             const { data } = await db.from('pegawai').select('*').order('nip', { ascending: true });
-            if (data) {
-                dataPegawaiGlobal = data;
-                document.getElementById('totalPegawai').innerText = data.length;
-                renderTabelPegawai(data);
-                const select = document.getElementById('cutiNip');
-                select.innerHTML = '';
-                data.forEach(p => select.innerHTML += `<option value="${p.nip}">${p.nip} - ${p.nama_lengkap} (Sisa: ${p.sisa_cuti} hr)</option>`);
-            }
+            allPegawai = data || [];
+            document.getElementById('statPegawai').innerText = allPegawai.length;
+            renderTabelPegawai(allPegawai);
+            const selectNip = document.getElementById('cutiNip');
+            selectNip.innerHTML = allPegawai.map(p => `<option value="${p.nip}">${p.nip} - ${p.nama_lengkap} (Sisa: ${p.sisa_cuti} hr)</option>`).join('');
         }
+
         function renderTabelPegawai(list) {
-            const tbody = document.getElementById('tabelPegawaiBody');
-            tbody.innerHTML = '';
-            list.forEach((p, idx) => {
-                const aksi = role === 'hrd' ? `
-                    <td class="no-print">
-                        <button class="btn btn-warning" style="padding:3px 7px;" onclick='editPegawai(${JSON.stringify(p)})'>Edit</button>
-                        <button class="btn btn-danger" style="padding:3px 7px;" onclick="hapusPegawai('${p.nip}')">Hapus</button>
-                    </td>` : '<td class="no-print">-</td>';
-                tbody.innerHTML += `<tr>
-                    <td>${idx + 1}</td><td><strong>${p.nip}</strong></td><td>${p.nama_lengkap}</td><td>${p.jabatan}</td>
-                    <td><span class="badge">${p.divisi}</span></td><td>${p.email}<br><small>${p.no_hp}</small></td>
-                    <td><strong>${p.sisa_cuti} Hari</strong></td>${aksi}
+            const tbody = document.getElementById('tbodyPegawai');
+            tbody.innerHTML = list.map((p, idx) => {
+                const aksi = role === 'hrd'
+                    ? `<button class="btn btn-warning" style="padding:4px 8px;" onclick="editPegawai('${p.nip}')">Edit</button>
+                       <button class="btn btn-danger" style="padding:4px 8px;" onclick="hapusPegawai('${p.nip}')">Hapus</button>`
+                    : '-';
+                return `<tr>
+                    <td>${idx + 1}</td>
+                    <td><b>${p.nip}</b></td>
+                    <td>${p.nama_lengkap}</td>
+                    <td>${p.jabatan}</td>
+                    <td><span class="badge">${p.divisi}</span></td>
+                    <td>${p.email}<br><small style="color:#666;">${p.no_hp}</small></td>
+                    <td><b>${p.sisa_cuti} Hari</b></td>
+                    <td class="no-print">${aksi}</td>
                 </tr>`;
-            });
+            }).join('');
         }
 
         function filterPegawai() {
             const q = document.getElementById('searchPegawai').value.toLowerCase();
-            renderTabelPegawai(dataPegawaiGlobal.filter(p => p.nip.toLowerCase().includes(q) || p.nama_lengkap.toLowerCase().includes(q) || p.divisi.toLowerCase().includes(q)));
+            const filtered = allPegawai.filter(p =>
+                p.nip.toLowerCase().includes(q) || p.nama_lengkap.toLowerCase().includes(q) || p.divisi.toLowerCase().includes(q)
+            );
+            renderTabelPegawai(filtered);
         }
 
-        function editPegawai(p) {
-            toggleFormPegawai(true);
-            document.getElementById('editMode').value = 'true';
-            document.getElementById('judulFormPegawai').innerText = 'Edit Data Pegawai: ' + p.nip;
-            document.getElementById('nip').value = p.nip;
-            document.getElementById('nip').readOnly = true;
-            document.getElementById('nama_lengkap').value = p.nama_lengkap;
-            document.getElementById('jabatan').value = p.jabatan;
-            document.getElementById('divisi').value = p.divisi;
-            document.getElementById('email').value = p.email;
-            document.getElementById('no_hp').value = p.no_hp;
-            document.getElementById('sisa_cuti').value = p.sisa_cuti;
+        function bukaFormPegawai() {
+            isEditMode = false;
+            document.getElementById('formTitle').innerText = 'Tambah Data Pegawai Baru';
+            document.getElementById('inNip').value = '';
+            document.getElementById('inNip').disabled = false;
+            document.getElementById('inNama').value = '';
+            document.getElementById('inJabatan').value = '';
+            document.getElementById('inEmail').value = '';
+            document.getElementById('inHp').value = '';
+            document.getElementById('inCuti').value = 12;
+            document.getElementById('formPegawaiBox').style.display = 'block';
         }
 
-        document.getElementById('formPegawai').addEventListener('submit', async (e) => {
-            e.preventDefault();
-            const isEdit = document.getElementById('editMode').value === 'true';
+        function editPegawai(nip) {
+            const p = allPegawai.find(item => item.nip === nip);
+            if (!p) return;
+            isEditMode = true;
+            document.getElementById('formTitle').innerText = 'Edit Data Pegawai: ' + nip;
+            document.getElementById('inNip').value = p.nip;
+            document.getElementById('inNip').disabled = true;
+            document.getElementById('inNama').value = p.nama_lengkap;
+            document.getElementById('inJabatan').value = p.jabatan;
+            document.getElementById('inDivisi').value = p.divisi;
+            document.getElementById('inEmail').value = p.email;
+            document.getElementById('inHp').value = p.no_hp;
+            document.getElementById('inCuti').value = p.sisa_cuti;
+            document.getElementById('formPegawaiBox').style.display = 'block';
+        }
+
+        function tutupFormPegawai() { document.getElementById('formPegawaiBox').style.display = 'none'; }
+
+        async function simpanPegawai() {
             const payload = {
-                nip: document.getElementById('nip').value.trim(),
-                nama_lengkap: document.getElementById('nama_lengkap').value.trim(),
-                jabatan: document.getElementById('jabatan').value.trim(),
-                divisi: document.getElementById('divisi').value,
-                email: document.getElementById('email').value.trim(),
-                no_hp: document.getElementById('no_hp').value.trim(),
-                sisa_cuti: parseInt(document.getElementById('sisa_cuti').value)
+                nip: document.getElementById('inNip').value.trim(),
+                nama_lengkap: document.getElementById('inNama').value.trim(),
+                jabatan: document.getElementById('inJabatan').value.trim(),
+                divisi: document.getElementById('inDivisi').value,
+                email: document.getElementById('inEmail').value.trim(),
+                no_hp: document.getElementById('inHp').value.trim(),
+                sisa_cuti: parseInt(document.getElementById('inCuti').value) || 12
             };
-            if (isEdit) await db.from('pegawai').update(payload).eq('nip', payload.nip);
-            else await db.from('pegawai').insert([payload]);
-            toggleFormPegawai(false);
+            if (!payload.nip || !payload.nama_lengkap) return alert('NIP dan Nama wajib diisi!');
+            if (isEditMode) { await db.from('pegawai').update(payload).eq('nip', payload.nip); }
+            else { await db.from('pegawai').insert([payload]); }
+            tutupFormPegawai();
             loadPegawai();
-        });
+        }
 
         async function hapusPegawai(nip) {
-            if (confirm('Hapus pegawai ' + nip + '?')) {
-                await db.from('pegawai').delete().eq('nip', nip);
-                loadPegawai();
-            }
+            if (!confirm('Hapus data pegawai ' + nip + '?')) return;
+            await db.from('pegawai').delete().eq('nip', nip);
+            loadPegawai();
         }
 
         async function loadCuti() {
             const { data } = await db.from('pengajuan_cuti').select('*').order('id_cuti', { ascending: false });
-            if (data) {
-                document.getElementById('totalCuti').innerText = data.length;
-                const tbody = document.getElementById('tabelCutiBody');
-                tbody.innerHTML = '';
-                data.forEach(c => {
-                    let aksi = '-';
-                    if (role === 'atasan' && c.status_atasan === 'Menunggu') {
-                        aksi = `<button class="btn btn-success" style="padding:3px 6px;" onclick="prosesCuti(${c.id_cuti},'atasan','Disetujui','${c.nip}',${c.lama_hari})">Setujui</button>
-                                <button class="btn btn-danger" style="padding:3px 6px;" onclick="prosesCuti(${c.id_cuti},'atasan','Ditolak','${c.nip}',${c.lama_hari})">Tolak</button>`;
-                    } else if (role === 'hrd' && c.status_atasan === 'Disetujui' && c.status_hrd === 'Menunggu') {
-                        aksi = `<button class="btn btn-success" style="padding:3px 6px;" onclick="prosesCuti(${c.id_cuti},'hrd','Disetujui','${c.nip}',${c.lama_hari})">Verifikasi</button>
-                                <button class="btn btn-danger" style="padding:3px 6px;" onclick="prosesCuti(${c.id_cuti},'hrd','Ditolak','${c.nip}',${c.lama_hari})">Tolak</button>`;
-                    }
-                    tbody.innerHTML += `<tr>
-                        <td><strong>${c.nip}</strong></td><td>${c.jenis_cuti}<br><small>${c.tanggal_mulai} s/d ${c.tanggal_selesai}</small></td>
-                        <td>${c.lama_hari} hr</td><td>${c.alasan}</td><td><span class="badge">${c.status_atasan}</span></td>
-                        <td><span class="badge">${c.status_hrd}</span></td><td class="no-print">${aksi}</td>
-                    </tr>`;
-                });
-            }
+            const list = data || [];
+            document.getElementById('statCuti').innerText = list.length;
+            document.getElementById('tbodyCuti').innerHTML = list.map(c => {
+                let aksi = '-';
+                const stAtasan = (c.status_atasan || 'Menunggu').toLowerCase();
+                const stHrd = (c.status_hrd || 'Menunggu').toLowerCase();
+                if (role === 'atasan' && stAtasan === 'menunggu') {
+                    aksi = `<button class="btn btn-success" style="padding:3px 6px;" onclick="prosesCuti(${c.id_cuti},'atasan','Disetujui','${c.nip}',${c.lama_hari})">Setujui</button>
+                            <button class="btn btn-danger" style="padding:3px 6px;" onclick="prosesCuti(${c.id_cuti},'atasan','Ditolak','${c.nip}',${c.lama_hari})">Tolak</button>`;
+                } else if (role === 'hrd' && stAtasan === 'disetujui' && stHrd === 'menunggu') {
+                    aksi = `<button class="btn btn-success" style="padding:3px 6px;" onclick="prosesCuti(${c.id_cuti},'hrd','Disetujui','${c.nip}',${c.lama_hari})">Verifikasi</button>
+                            <button class="btn btn-danger" style="padding:3px 6px;" onclick="prosesCuti(${c.id_cuti},'hrd','Ditolak','${c.nip}',${c.lama_hari})">Tolak</button>`;
+                } else if (stAtasan === 'disetujui' && stHrd === 'disetujui') {
+                    aksi = `<button class="btn btn-primary" style="padding:3px 8px;" onclick="cetakSuratCuti(${c.id_cuti})">Cetak Surat</button>`;
+                }
+                return `<tr>
+                    <td><b>${c.nip}</b></td>
+                    <td>${c.jenis_cuti}<br><small>${c.tanggal_mulai} s/d ${c.tanggal_selesai}</small></td>
+                    <td>${c.lama_hari} hr</td>
+                    <td>${c.alasan}</td>
+                    <td><span class="badge">${c.status_atasan}</span></td>
+                    <td><span class="badge">${c.status_hrd}</span></td>
+                    <td>${aksi}</td>
+                </tr>`;
+            }).join('');
         }
 
-        document.getElementById('formCuti').addEventListener('submit', async (e) => {
-            e.preventDefault();
-            const nip = document.getElementById('cutiNip').value;
-            const lama_hari = parseInt(document.getElementById('cutiHari').value);
-            const peg = dataPegawaiGlobal.find(p => p.nip === nip);
-            if (peg && peg.sisa_cuti < lama_hari) return alert('Sisa cuti tidak cukup!');
-            await db.from('pengajuan_cuti').insert([{
-                nip, jenis_cuti: document.getElementById('cutiJenis').value,
+        async function ajukanCuti() {
+            const payload = {
+                nip: document.getElementById('cutiNip').value,
+                jenis_cuti: document.getElementById('cutiJenis').value,
                 tanggal_mulai: document.getElementById('cutiMulai').value,
                 tanggal_selesai: document.getElementById('cutiSelesai').value,
-                lama_hari, alasan: document.getElementById('cutiAlasan').value
-            }]);
-            alert('Pengajuan cuti terkirim!');
-            document.getElementById('formCuti').reset();
+                lama_hari: parseInt(document.getElementById('cutiLama').value) || 1,
+                alasan: document.getElementById('cutiAlasan').value.trim()
+            };
+            if (!payload.tanggal_mulai || !payload.tanggal_selesai || !payload.alasan) return alert('Lengkapi tanggal dan alasan cuti!');
+            await db.from('pengajuan_cuti').insert([payload]);
+            alert('Pengajuan cuti berhasil dikirim!');
+            document.getElementById('cutiAlasan').value = '';
             loadCuti();
-        });
+        }
 
-        async function prosesCuti(id, level, status, nip, lamaHari) {
-            if (level === 'atasan') await db.from('pengajuan_cuti').update({ status_atasan: status }).eq('id_cuti', id);
-            else if (level === 'hrd') {
-                await db.from('pengajuan_cuti').update({ status_hrd: status }).eq('id_cuti', id);
-                if (status === 'Disetujui') {
-                    const peg = dataPegawaiGlobal.find(p => p.nip === nip);
-                    if (peg) await db.from('pegawai').update({ sisa_cuti: peg.sisa_cuti - lamaHari }).eq('nip', nip);
+        async function prosesCuti(id, level, status, nip, hari) {
+            const updateField = level === 'atasan' ? { status_atasan: status } : { status_hrd: status };
+            await db.from('pengajuan_cuti').update(updateField).eq('id_cuti', id);
+            if (level === 'hrd' && status === 'Disetujui') {
+                const peg = allPegawai.find(p => p.nip === nip);
+                if (peg) {
+                    const sisaBaru = Math.max(0, peg.sisa_cuti - hari);
+                    await db.from('pegawai').update({ sisa_cuti: sisaBaru }).eq('nip', nip);
                 }
             }
-            loadPegawai(); loadCuti();
+            loadPegawai();
+            loadCuti();
         }
 
         function logout() { localStorage.clear(); window.location.href = 'index.html'; }
-        loadPegawai(); loadCuti();
+        loadPegawai();
+        loadCuti();
     </script>
 </body>
 </html>
