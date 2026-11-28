@@ -7,31 +7,31 @@
     <style>
         * { box-sizing: border-box; font-family: 'Segoe UI', Tahoma, sans-serif; }
         body { background-color: #f4f6f9; margin: 0; color: #333; }
-        .navbar { background-color: #0d6efd; color: white; padding: 15px 25px; display: flex; justify-content: space-between; align-items: center; }
+        .navbar { background-color: #355c96; color: white; padding: 15px 25px; display: flex; justify-content: space-between; align-items: center; }
         .navbar h1 { margin: 0; font-size: 18px; letter-spacing: 0.5px; }
         .container { max-width: 1200px; margin: 20px auto; padding: 0 20px; }
         .stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; margin-bottom: 20px; }
-        .stat-card { background: white; padding: 18px 20px; border-radius: 8px; box-shadow: 0 2px 6px rgba(0,0,0,0.06); border-left: 4px solid #0d6efd; display: flex; justify-content: space-between; align-items: center; }
+        .stat-card { background: white; padding: 18px 20px; border-radius: 8px; box-shadow: 0 2px 6px rgba(0,0,0,0.06); border-left: 4px solid #355c96; display: flex; justify-content: space-between; align-items: center; }
         .stat-card.cuti { border-left-color: #ffc107; }
-        .stat-card.cetak { border-left-color: #198754; }
+        .stat-card.cetak { border-left-color: #dc3545; }
         .stat-card h3 { margin: 0 0 5px 0; font-size: 13px; color: #666; font-weight: normal; }
         .stat-card .num { font-size: 26px; font-weight: bold; color: #222; }
         .tabs { display: flex; gap: 10px; margin-bottom: 15px; }
         .tab-btn { padding: 10px 18px; border: none; border-radius: 6px; background: #e2e6ea; color: #333; font-weight: 600; cursor: pointer; }
-        .tab-btn.active { background: #0d6efd; color: white; }
+        .tab-btn.active { background: #355c96; color: white; }
         .panel { background: white; padding: 20px; border-radius: 8px; box-shadow: 0 2px 6px rgba(0,0,0,0.06); }
         .panel-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; flex-wrap: wrap; gap: 10px; }
         .panel-header h2 { margin: 0; font-size: 16px; }
         .btn { padding: 8px 14px; border: none; border-radius: 5px; font-size: 13px; font-weight: 600; cursor: pointer; color: white; }
-        .btn-primary { background: #0d6efd; }
-        .btn-success { background: #198754; }
+        .btn-primary { background: #355c96; }
+        .btn-success { background: #355c96 }
         .btn-warning { background: #ffc107; color: #000; }
         .btn-danger { background: #dc3545; }
         input, select, textarea { padding: 8px 10px; border: 1px solid #ccc; border-radius: 5px; font-size: 13px; }
         .form-box { background: #f8f9fa; border: 1px solid #dee2e6; padding: 15px; border-radius: 6px; margin-bottom: 15px; display: none; }
         .form-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin-bottom: 10px; }
         table { width: 100%; border-collapse: collapse; font-size: 13px; }
-        th { background: #0d6efd; color: white; text-align: left; padding: 10px; }
+        th { background: #355c96; color: white; text-align: left; padding: 10px; }
         td { padding: 9px 10px; border-bottom: 1px solid #eee; }
         tr:hover { background-color: #f8f9fa; }
         .badge { padding: 3px 8px; border-radius: 4px; font-size: 11px; font-weight: 600; background: #e9ecef; }
@@ -80,7 +80,7 @@
                 <div><h3>Laporan Arsip</h3><div style="font-size:15px; font-weight:bold;">Siap Cetak PDF</div></div>
                 <div style="display:flex; flex-direction:column; gap:5px;">
                     <button class="btn btn-success" onclick="cetakLaporanResmi()">Cetak Laporan</button>
-                    <button class="btn btn-primary" onclick="cetakSuratCutiTerakhir()">Cetak Surat Cuti</button>
+
                 </div>
             </div>
         </div>
@@ -170,7 +170,7 @@
                         <option value="Cuti Tahunan">Cuti Tahunan</option>
                         <option value="Cuti Sakit">Cuti Sakit</option>
                         <option value="Cuti Alasan Penting">Cuti Alasan Penting</option>
-                    </select>
+                     </select>
                     <label>Tanggal Mulai</label>
                     <input type="date" id="cutiMulai">
                     <label>Tanggal Selesai</label>
@@ -250,6 +250,13 @@
         document.getElementById('lblUser').innerText = username;
         document.getElementById('lblRole').innerText = role.toUpperCase();
         if (role !== 'hrd') document.getElementById('btnTambahPegawai').style.display = 'none';
+
+        if (role !== 'pegawai') {
+            const formCuti = document.querySelector('.cuti-form');
+            const gridCuti = document.querySelector('.cuti-grid');
+            if (formCuti) formCuti.style.display = 'none';
+            if (gridCuti) gridCuti.style.gridTemplateColumns = '1fr';
+        }
 
         let allPegawai = [];
         let isEditMode = false;
