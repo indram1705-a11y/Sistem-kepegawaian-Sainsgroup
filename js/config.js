@@ -30,12 +30,9 @@ const DATA_50_PEGAWAI = NAMA_PEGAWAI.map((nama, i) => {
 });
 
 localStorage.setItem('db_pegawai', JSON.stringify(DATA_50_PEGAWAI));
-if (!localStorage.getItem('db_cuti')) {
-    localStorage.setItem('db_cuti', JSON.stringify([
-        { id_cuti: 1, nip: 'SGK-007', jenis_cuti: 'Cuti Tahunan', tanggal_mulai: '2026-12-01', tanggal_selesai: '2026-12-03', lama_hari: 3, alasan: 'Urusan keluarga di Sumba', status_atasan: 'Disetujui', status_hrd: 'Menunggu' },
-        { id_cuti: 2, nip: 'SGK-010', jenis_cuti: 'Cuti Sakit', tanggal_mulai: '2026-11-28', tanggal_selesai: '2026-11-29', lama_hari: 2, alasan: 'Demam dan rawat jalan', status_atasan: 'Menunggu', status_hrd: 'Menunggu' }
-    ]));
-}
+    if (!localStorage.getItem('db_pengajuan_cuti')) {
+        localStorage.setItem('db_pengajuan_cuti', JSON.stringify([]));
+    }
 
 const db = {
     from(table) {
